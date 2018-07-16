@@ -20,13 +20,14 @@ def load():
     try:
         res = es.count(index=IDX)
         tot = res['count']
+        print("We have {} Records already ".format(tot))
 
     except Exception as err:
         print("Index does not exist")
         es.indices.create(index=IDX, ignore=400)
         tot = 0
 
-    for file in glob("/Users/timothyhSeed/*.sh", recursive=True):
+    for file in glob("/Users/tim/MD_Office/*", recursive=True):
         print("" + file)
         lines = file_to_str(file)
         doc = {}
@@ -61,3 +62,4 @@ def search():
 
 
 #search()
+load()

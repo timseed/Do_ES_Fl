@@ -1,9 +1,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
-        <title>Reusable Form Demo</title>
+        <title>Simple Query Form</title>
     </head>
     <body>
+     <form action="" method="post">
+            {{ form.csrf }}
+
+            <div class="input Query">
+                {{ form.name.label }} {{ form.name }}
+            </div>
+
+            <div class="input submit">
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul>
@@ -13,16 +24,17 @@
                 </ul>
             {% endif %}
         {% endwith %}
-        <form action="" method="post">
-            {{ form.csrf }}
-
-            <div class="input text">
-                {{ form.name.label }} {{ form.name }}
-            </div>
-
-            <div class="input submit">
-                <input type="submit" value="Submit" />
-            </div>
-        </form>
+    <table class="centered thick-border">
+        <tr>
+                <th>First name</th>
+                <th>Age</th>
+        </tr>
+        {% for k, v in dates.items() %}
+            <tr>
+            <td>{{ k }}</td>
+            <td>{{ v }}</td>
+            </tr>
+        {%  endfor %}
+    </table>
     </body>
 </html>
