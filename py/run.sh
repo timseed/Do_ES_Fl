@@ -17,7 +17,10 @@ cleanup()
 }
 
 # wait forever
+cd /esweb
+echo "Starting Flask app"
 while true
 do
-  tail -f /dev/null & wait ${!}
+  #tail -f /dev/null & wait ${!}
+  python app.py
 done

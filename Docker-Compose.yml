@@ -5,7 +5,7 @@ services:
     container_name: es_doc
     build: ./doc
     environment:
-      - "discovery.type=single-node" 
+      - "discovery.type=single-node"
     volumes:
       - esdata1:/usr/share/elasticsearch/data
     ports:
@@ -18,7 +18,7 @@ services:
       container_name: es_py
       build: ./py
       ports:
-        - "9280:9280"
+        - "5000:5000"
       networks:
         - es_net
 

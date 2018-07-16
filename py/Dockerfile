@@ -1,11 +1,10 @@
 FROM frolvlad/alpine-python3
 MAINTAINER tim@sy-edm.com
 
-run pip3 install elasticsearch flask && \
-    pip install --upgrade pip
+run pip install --upgrade pip flask wtforms elasticsearch markdown
 
 add run.sh  /run.sh
 run chmod +x /run.sh
-add test.py  /test.py
+add esweb/ /esweb
 
 CMD "/run.sh"
