@@ -1,0 +1,29 @@
+version: "3"
+services:
+
+  es_doc:
+    container_name: es_doc
+    build: ./doc
+    environment:
+      - "discovery.type=single-node" 
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9200"
+    networks:
+      - es_net
+
+  es_py:
+      container_name: es_py
+      build: ./py
+      ports:
+        - "9280:9280"
+      networks:
+        - es_net
+
+volumes:
+  esdata1:
+
+networks:
+  es_net:
