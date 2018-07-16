@@ -23,6 +23,17 @@ Use the command
 
 And that should be it !!
 
+### Stopping
+
+You can either stop each individual container or use docker-compose
+
+    docker-compose down
+
+### Detached Mode
+
+When you are happy that the process is working well, there is probably no need to look at the screen. So run the processes with *detached* mode.
+
+    docker-composer up -d
 
 # Adding some Data
 
