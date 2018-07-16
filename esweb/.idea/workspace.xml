@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="636dbd90-c885-4eae-8659-39b2e127e719" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/esweb.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/hello.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../py/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../py/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../py/run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../py/run.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../py/esweb/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../py/esweb/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
