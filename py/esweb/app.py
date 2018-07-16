@@ -1,10 +1,9 @@
 from flask import Flask, render_template, flash, request
 from flask import Markup
-from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
+from wtforms import Form, validators, StringField
 from elasticsearch import Elasticsearch
 import markdown
-import json
-from glob import glob
+
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -14,7 +13,9 @@ app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 class ReusableForm(Form):
     name = StringField('Name:', validators=[validators.required()])
 
+
 class esq(object):
+
     def __init__(self,node="0.0.0.0",port=9200):
         self.es=Elasticsearch([{"host": node, "port": port}])
         self.IDX = 'mydocs'
@@ -57,6 +58,13 @@ def hello():
             flash('All the form fields are required. ')
 
     return render_template('hello.html', form=form,dates=res)
+
+
+@app.route('/delete')
+def delete():
+    e = esq("es_doc", 9200)
+    e.es.indices.delete(index=e.IDX, ignore=[400, 404])
+    return 'Index {} deleted'.format(e.IDX)
 
 
 if __name__ == '__main__':
