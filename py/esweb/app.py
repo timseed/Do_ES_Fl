@@ -67,5 +67,20 @@ def delete():
     return 'Index {} deleted'.format(e.IDX)
 
 
+#curl -H "Content-type: application/octet-stream" \
+#-X POST http://127.0.0.1:5000/messages --data-binary @file_to_load
+
+@app.route('/add', methods=['POST'])
+def add():
+    if request.headers['Content-Type'] == 'text/plain':
+        return "Text Message: " + request.data
+    else:
+        return "415 Unsupported Media Type ;)"
+
+@app.route('/add')
+def help():
+    return render_template('help.html')
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
