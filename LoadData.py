@@ -4,7 +4,7 @@ from glob import glob
 
 
 def file_to_str(filename):
-    with open(filename, "rt") as source:
+    with open(filename, "rt",encoding='utf-8',errors='ignore') as source:
         lines = "".join(source.readlines())
     return lines
 
