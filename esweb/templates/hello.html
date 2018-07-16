@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>Simple Query Form</title>
+         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
      <form action="" method="post">
@@ -26,8 +27,8 @@
         {% endwith %}
     <table class="centered thick-border">
         <tr>
-                <th>First name</th>
-                <th>Age</th>
+                <th>DocID</th>
+                <th>Document</th>
         </tr>
         {% for k, v in dates.items() %}
             <tr>
