@@ -9,13 +9,19 @@
 To call the Add url you need to pass data in from bash like this.
 <br>
 <br>
-curl -H "Content-type: application/octet-stream" -X POST http://127.0.0.1:5000/messages --data-binary @file_to_load
+curl -H "Content-type: text/plain" -X POST http://0.0.0.0:5000/messages --data-binary @file_to_load
 <br>
+
+To Load multiple files to something like this
+<br>
+find "*/Markdown" | grep md$ | xargs -I {} -t curl -H "Content-type: text/plain" -X POST http://0.0.0.0:5000/add --data-binary @{}
+
+
 <h2>Delete</h2>
 
 To reset the data ... then call the /delete api
 
-curl 'http://127.0.0.1:5000/delete'
+curl 'http://0.0.0.0:5000/delete'
 
 
 

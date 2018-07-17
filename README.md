@@ -19,7 +19,7 @@ But I do not like reading JSON output (even using jq), I would like some nice HT
 
 I have Purposefully created 2 containers, one for the ElasticSearch the other to handle the Flask.
 
-To manage the orchestration for building and running, I am wrapping the Dockerfile's with Docker-Compose; 
+To manage the orchestration for building and running, I am wrapping the Dockerfile's with Docker-Compose;
 
 # Requirements
 
@@ -52,6 +52,9 @@ When you are happy that the process is working well, there is probably no need t
 
 # Adding some Data
 
+
+## From a Client in a traditional manner.
+
 Obviously the container(s) need to be running, so assuming they are - on the host machine you will need to run the **LoadData.py** script. This has a few requirements
 
 These requirements can be met using
@@ -60,12 +63,44 @@ These requirements can be met using
 
 Now we can run the **LoadData.py** script.
 
-## LoadData.py
+### LoadData.py
 
-When you enter a filespec please use a full path, not ~/ - and add the woldcard of the filespec you want to add.
+When you enter a filespec please use a full path, **not ~/** - and add the wildcard of the filespec you want to add.
+
+## Using a the ADD REST API
+
+The flask project has an *add* API point, which is
+To "Push" a document into the Index you need to do This
+```bash
+curl -H "Content-type: application/octet-stream" \
+     -X POST http://127.0.0.1:5000/add \
+    --data-binary @file_to_load
+```
+Should you want to push lots of documents then a small script like this would work well on a Linux host
+
+```bash
+find $PATH_TO_SEARCH -name *.md | xargs -i -t \
+     curl -H "Content-type: application/octet-stream" \
+     -X POST http://127.0.0.1:5000/add \
+      --data-binary @{}
+```
+
+On a mac the Xargs command is a little different becoming
+
+```bash
+find $PATH_TO_SEARCH -name *.md | xargs -I {} -t \
+     curl -H "Content-type: application/octet-stream" \
+     -X POST http://127.0.0.1:5000/add \
+     --data-binary @{}
+```
+
 
 # Querying
 
 Open a WebBrowser to http://0.0.0.0:5000
 
 Enter the text, and press query.
+
+# Help
+
+There is some help available via the Flask Web server at http://0.0.0.0.0:5000/

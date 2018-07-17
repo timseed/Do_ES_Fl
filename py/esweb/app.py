@@ -1,9 +1,9 @@
-from flask import Flask, render_template, flash, request
-from flask import Markup
+from flask import Flask, render_template, flash, request, Markup
+from flask import jsonify
 from wtforms import Form, validators, StringField
 from elasticsearch import Elasticsearch
 import markdown
-
+import json
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -16,7 +16,7 @@ class ReusableForm(Form):
 
 class esq(object):
 
-    def __init__(self,node="0.0.0.0",port=9200):
+    def __init__(self,node="es_doc",port=9200):
         self.es=Elasticsearch([{"host": node, "port": port}])
         self.IDX = 'mydocs'
         self.TYPE = 'markdown'
@@ -41,15 +41,27 @@ class esq(object):
                 flash("Err {}".format(str(err)))
             return rv
 
+    def count(self):
+        try:
+            cnt = self.es.count(index=self.IDX,
+                              doc_type=self.TYPE,
+                              body={"query": {"match_all": {}}})
+            return cnt["count"]
+
+        except Exception as err:
+            print("Index does not exist")
+            self.es.indices.create(index=self.IDX, ignore=400)
+            tot = 0
+
+
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():
     form = ReusableForm(request.form)
-    e=esq("es_doc",9200)
     res={}
     if request.method == 'POST':
         name = request.form['name']
-
+        e=esq(node="es_doc",port=9200)
         if form.validate():
             res=e.search(name)
             ## Save the comment here.
@@ -73,11 +85,25 @@ def delete():
 @app.route('/add', methods=['POST'])
 def add():
     if request.headers['Content-Type'] == 'text/plain':
-        return "Text Message: " + request.data
+        e = esq("es_doc", 9200)
+        tot = e.count()
+        doc = {}
+        doc['text'] = request.data.decode('utf-8')
+
+        try:
+
+            res=e.es.index(index=e.IDX, doc_type=e.TYPE, id=tot, body=json.dumps(doc, ensure_ascii=False))
+            print("Loaded Document {}".format(tot))
+            tot = tot + 1
+            return jsonify(id=tot,status=200)
+
+        except Exception as err:
+            flash(str(err))
+
     else:
         return "415 Unsupported Media Type ;)"
 
-@app.route('/add')
+@app.route('/help')
 def help():
     return render_template('help.html')
 
