@@ -4,6 +4,7 @@ from wtforms import Form, validators, StringField
 from elasticsearch import Elasticsearch
 import markdown
 import json
+from time import sleep
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -86,10 +87,11 @@ def delete():
 def add():
     if request.headers['Content-Type'] == 'text/plain':
         e = esq("es_doc", 9200)
+        sleep(1)
         tot = e.count()
         doc = {}
         doc['text'] = request.data.decode('utf-8')
-
+   
         try:
 
             res=e.es.index(index=e.IDX, doc_type=e.TYPE, id=tot, body=json.dumps(doc, ensure_ascii=False))

@@ -30,6 +30,12 @@ To manage the orchestration for building and running, I am wrapping the Dockerfi
 
 Initially you just need to pull this project from git
 
+    git pull https://github.com/timseed/Do_ES_Fl.git
+    cd Do_ES_Fl
+    docker-compose up --build -d
+
+And thats it :)
+
 ### Building
 
 Use the command
