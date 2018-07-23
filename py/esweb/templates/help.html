@@ -6,24 +6,57 @@
 </head>
 <h2>Add</h2>
 
-To call the Add url you need to pass data in from bash like this.
+There are 2 ways of adding a file into the Search Index
+<br>
+
+<h3>Simple Mode</h3>
+
+To call the Add url you need to pass data in from bash like this. However if you do this the <b>"index"</b> is a
+sequential number, and not the file-name.
+<br>
+With this mechanism it is also not possible to update modified files.
 <br>
 <br>
-curl -H "Content-type: text/plain" -X POST http://0.0.0.0:5000/messages --data-binary @file_to_load
-<br>
+curl -H "Content-type: text/plain" -X POST http://0.0.0.0:5000/add --data-binary @file_to_load
+<br><br>
 
 To Load multiple files to something like this
-<br>
+<br><br>
 find "*/Markdown" | grep md$ | xargs -I {} -t curl -H "Content-type: text/plain" -X POST http://0.0.0.0:5000/add --data-binary @{}
+<br><br>
 
+<h3>Full Mode</h3>
+<br>
+We pass the file, and some json data at the same time to the /add API point, this loads the file, and uses the <b>id</b>
+value in the json_data to set the document id value.
+<br><br><br>
+The call looks like this
+<br><br>
+curl -X POST -H "Content-Type: multipart/form-data" \  <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        -F "file=&lt;data_file.txt" \  <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        -F "json_data={\"id\":\"data_file.txt\",\"security\":\"None\"}" \ <br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        -X POST http://0.0.0.0:5000/add <br>
+<br><br>
+In a Script to load you would do something like this <br><br>
+
+cd "Some/Dir/With/MD_Files/Markdown"<br>
+find . | grep md$ | xargs -I {} \<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   curl -X POST -H "Content-Type: multipart/form-data" \<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        -F "file=<{}" \<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;       -F "json_data={\"id\":\"$(basename {})\",\"security\":\"None\"}" \<br>
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        -X POST http://0.0.0.0:5000/add<br>
+<br>
+<br>
+<br>
+To Load only new or modified files use <b>find -m</b> or <b>find -c</b> <br><br>
 
 <h2>Delete</h2>
+<br><br>
+To reset the data ... then call the /delete api<br>Like this<br>
+<br><br>
+curl 'http://0.0.0.0:5000/delete'<br><br>
 
-To reset the data ... then call the /delete api
-
-curl 'http://0.0.0.0:5000/delete'
-
-
+<br><br>
 
 
 <body>
