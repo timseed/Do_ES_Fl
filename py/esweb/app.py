@@ -77,6 +77,7 @@ def hello():
 def delete():
     e = esq("es_doc", 9200)
     e.es.indices.delete(index=e.IDX, ignore=[400, 404])
+    e.count()
     return 'Index {} deleted'.format(e.IDX)
 
 
@@ -107,10 +108,22 @@ def add():
         print("multi-form data")
         json_data=request.form.get("json_data")
         jd = json.loads(json_data)
-        file_data=request.form.get("file")
 
+        doc = {}
+        doc['text']=str(request.form.get("file"))
+        if 'id' in jd:
+            e = esq("es_doc", 9200)
+            tot = e.count()
+            jid=str(jd['id']).lower()
+            res = e.es.index(index=e.IDX,
+                             doc_type=e.TYPE,
+                             id=jid,
+                             body=json.dumps(doc, ensure_ascii=False))
 
-        return "400 Form-Mixed.... Possible"
+            return jsonify(status=200)
+        else:
+            return jsonify(id="Not Found. No Id Specified in JSON Data", status=400)
+
     else:
         return "415 Unsupported Media Type ;)"
 
