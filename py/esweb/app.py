@@ -101,7 +101,16 @@ def add():
 
         except Exception as err:
             flash(str(err))
+    elif request.headers['Content-Type'] == 'multipart/mixed':
+        return "400 Mixed"
+    elif request.headers['Content-Type'].startswith('multipart/form-data'):
+        print("multi-form data")
+        json_data=request.form.get("json_data")
+        jd = json.loads(json_data)
+        file_data=request.form.get("file")
 
+
+        return "400 Form-Mixed.... Possible"
     else:
         return "415 Unsupported Media Type ;)"
 
