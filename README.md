@@ -75,6 +75,8 @@ When you enter a filespec please use a full path, **not ~/** - and add the wildc
 
 ## Using a the ADD REST API
 
+### Simple index
+
 The flask project has an *add* API point, which is
 To "Push" a document into the Index you need to do This
 ```bash
@@ -100,6 +102,34 @@ find $PATH_TO_SEARCH -name *.md | xargs -I {} -t \
      --data-binary @{}
 ```
 
+### Better index
+
+One of the issues using the simple index is that you can only send a file, and no associated information.
+
+The simple index creates an index based on the number of documents in the elasticsearch index. This is simple, but means the document can not be updated. But simply added too.
+
+*Welcome to "Better Index".*
+
+Using a slightly different Curl call, we send the file (as ASCII not Binary), plus a json Dictionary with relevant info.
+
+Note: 2 variables file and json file is loaded using < redirection.
+Json_Data is a hand crafted dictionary.This will create an index using a filename
+
+```bash
+cd "/drive/dir/place_with_files/Markdown"
+find . | grep md$ | xargs -I {} \
+    curl -X POST -H "Content-Type: multipart/form-data" \
+         -F "file=<{}" \
+         -F "json_data={\"id\":\"$(basename {})\",\"security\":\"None\"}" \
+         -X POST http://0.0.0.0:5000/add
+```
+
+The advantage of this mechanism is that the document can be updated, and then the update overwrites the old data. Also just new documents can be added .... How ?
+
+    find -m -7
+    find -c -7
+
+Enjoy adding, and updating your documents.
 
 # Querying
 
@@ -110,3 +140,11 @@ Enter the text, and press query.
 # Help
 
 There is some help available via the Flask Web server at http://0.0.0.0.0:5000/
+
+So if you can not remember the Curl Commands there is some help available.
+
+# Clear the Index
+
+To reset the Index - please be careful there is no "Are you sure" mechanism.
+
+http://0.0.0.0.0:5000/delete
