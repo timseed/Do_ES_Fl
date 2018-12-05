@@ -40,13 +40,13 @@ And thats it :)
 
 Use the command
 
-    docker-compose up --build
+    docker-compose up --build -d
 
-And that should be it !!
+And that should be it !!, The -d param means detached; Which means any log output and error messages will be hidden away from you.
 
 ### Stopping
 
-You can either stop each individual container or use docker-compose
+You can either stop each individual container or use docker-compose. If you started them together, it makes more sense to stop them together.
 
     docker-compose down
 
@@ -57,6 +57,10 @@ When you are happy that the process is working well, there is probably no need t
     docker-composer up -d
 
 # Adding some Data
+
+At this point, we should have 2 container, which are built - and which run. But which have no data inside them. This is not our desired final state.
+
+So let us add some data to the ElasticSearch Container.
 
 
 ## From a Client in a traditional manner.
@@ -75,13 +79,18 @@ When you enter a filespec please use a full path, **not ~/** - and add the wildc
 
 ## Using a the ADD REST API
 
+Please note: That the Flask Server listens now on a non default port of **5010**.
+
+This change was done to allow dev flask env to be run, without impacting and clashing with this project.
+
+
 ### Simple index
 
 The flask project has an *add* API point, which is
 To "Push" a document into the Index you need to do This
 ```bash
 curl -H "Content-type: application/octet-stream" \
-     -X POST http://127.0.0.1:5000/add \
+     -X POST http://127.0.0.1:5010/add \
     --data-binary @file_to_load
 ```
 Should you want to push lots of documents then a small script like this would work well on a Linux host
@@ -89,7 +98,7 @@ Should you want to push lots of documents then a small script like this would wo
 ```bash
 find $PATH_TO_SEARCH -name *.md | xargs -i -t \
      curl -H "Content-type: application/octet-stream" \
-     -X POST http://127.0.0.1:5000/add \
+     -X POST http://127.0.0.1:5010/add \
       --data-binary @{}
 ```
 
@@ -98,7 +107,7 @@ On a mac the Xargs command is a little different becoming
 ```bash
 find $PATH_TO_SEARCH -name *.md | xargs -I {} -t \
      curl -H "Content-type: application/octet-stream" \
-     -X POST http://127.0.0.1:5000/add \
+     -X POST http://127.0.0.1:5010/add \
      --data-binary @{}
 ```
 
@@ -121,7 +130,7 @@ find . | grep md$ | xargs -I {} \
     curl -X POST -H "Content-Type: multipart/form-data" \
          -F "file=<{}" \
          -F "json_data={\"id\":\"$(basename {})\",\"security\":\"None\"}" \
-         -X POST http://0.0.0.0:5000/add
+         -X POST http://0.0.0.0:5010/add
 ```
 
 The advantage of this mechanism is that the document can be updated, and then the update overwrites the old data. Also just new documents can be added .... How ?
@@ -133,13 +142,13 @@ Enjoy adding, and updating your documents.
 
 # Querying
 
-Open a WebBrowser to http://0.0.0.0:5000
+Open a WebBrowser to http://0.0.0.0:5010
 
 Enter the text, and press query.
 
 # Help
 
-There is some help available via the Flask Web server at http://0.0.0.0.0:5000/
+There is some help available via the Flask Web server at http://0.0.0.0.0:/
 
 So if you can not remember the Curl Commands there is some help available.
 
@@ -147,4 +156,4 @@ So if you can not remember the Curl Commands there is some help available.
 
 To reset the Index - please be careful there is no "Are you sure" mechanism.
 
-http://0.0.0.0.0:5000/delete
+http://0.0.0.0.0:5010/delete

@@ -18,7 +18,8 @@ services:
       container_name: es_py
       build: ./py
       ports:
-        - "5000:5000"
+      #   External:Internal
+        - "5010:5000"
       networks:
         - es_net
 
